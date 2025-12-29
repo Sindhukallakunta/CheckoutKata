@@ -8,17 +8,21 @@ namespace CheckoutKata
 {
     public class Checkout:ICheckout
     {
+        private readonly PricingRules _rules;
+        private readonly List<string> _items = new();
         public Checkout(PricingRules pricingRules)
         {
+            _rules = pricingRules;
         }
 
         public void Scan(string item)
         {
+            _items.Add(item);
         }
 
         public int GetTotalPrice()
         {
-            return 0;
+            return _items.Sum(i => _rules.UnitPrices[i]);
         }
     }
 }
