@@ -43,5 +43,26 @@ namespace CheckoutKata.Tests
             Assert.That(checkout.GetTotalPrice(), Is.EqualTo(110));
         }
 
+        [Test]
+        public void Three_As_Cost_130()
+        {
+            var rules = new PricingRules(
+                new Dictionary<string, int> { ["A"] = 50 },
+                new Dictionary<string, MultiBuyOffer>
+                {
+                    ["A"] = new MultiBuyOffer(3, 130)
+                }
+            );
+
+            var checkout = new Checkout(rules);
+
+            checkout.Scan("A");
+            checkout.Scan("A");
+            checkout.Scan("A");
+
+            Assert.That(checkout.GetTotalPrice(), Is.EqualTo(130));
+        }
+
+
     }
 }
