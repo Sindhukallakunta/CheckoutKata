@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 namespace CheckoutKata
 {
     public class Checkout:ICheckout
-    {      
+    {
+        public Checkout(PricingRules pricingRules)
+        {
+        }
 
         public void Scan(string item)
         {
