@@ -22,5 +22,26 @@ namespace CheckoutKata.Tests
 
             Assert.That(checkout.GetTotalPrice(), Is.EqualTo(50));
         }
+
+        [Test]
+        public void Order_Does_Not_Matter()
+        {
+            var rules = new PricingRules(
+                new Dictionary<string, int>
+                {
+                    ["A"] = 50,
+                    ["B"] = 30
+                }
+            );
+
+            var checkout = new Checkout(rules);
+
+            checkout.Scan("B");
+            checkout.Scan("A");
+            checkout.Scan("B");
+
+            Assert.That(checkout.GetTotalPrice(), Is.EqualTo(110));
+        }
+
     }
 }
