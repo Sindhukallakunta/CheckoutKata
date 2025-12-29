@@ -22,7 +22,26 @@ namespace CheckoutKata
 
         public int GetTotalPrice()
         {
-            return _items.Sum(i => _rules.UnitPrices[i]);
+            var total = 0;
+
+            foreach (var group in _items.GroupBy(i => i))
+            {
+                var sku = group.Key;
+                var count = group.Count();
+                var unitPrice = _rules.UnitPrices[sku];
+
+                if (_rules.Offers.TryGetValue(sku, out var offer))
+                {
+                    total += (count / offer.Quantity) * offer.Price;
+                    total += (count % offer.Quantity) * unitPrice;
+                }
+                else
+                {
+                    total += count * unitPrice;
+                }
+            }
+
+            return total;
         }
     }
 }
