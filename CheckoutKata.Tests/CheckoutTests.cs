@@ -36,12 +36,12 @@ namespace CheckoutKata.Tests
         [Test]
         public void Order_Does_Not_Matter()
         {
-            var pricingRules = new IPricingRule[]                
+            var pricingRules = new IPricingRule[]
                 {
                     new UnitPriceRule("A", 50),
                     new UnitPriceRule("B", 30)
                 };
-            
+
 
             var checkout = new Checkout(pricingRules);
 
@@ -104,7 +104,30 @@ namespace CheckoutKata.Tests
             Assert.That(checkout.GetTotalPrice(), Is.EqualTo(110));
         }
 
+        [Test]
+        public void ComplexScenario_MultipleOffersAndItems()
+        {
+            var pricingRules = new IPricingRule[]
+           {
+               new MultiBuyRule("A", 3, 130, 50),
+               new MultiBuyRule("B",2, 45, 30),
+               new UnitPriceRule("C", 20),
+               new UnitPriceRule("D", 15),
+              
+           };
+            var checkout = new Checkout(pricingRules);
 
+            checkout.Scan("A");
+            checkout.Scan("A");
+            checkout.Scan("A");
+            checkout.Scan("A");
+            checkout.Scan("B");
+            checkout.Scan("B");
+            checkout.Scan("C");
+            checkout.Scan("D");
+
+            Assert.That(checkout.GetTotalPrice(), Is.EqualTo(260));
+        }
 
 
     }
