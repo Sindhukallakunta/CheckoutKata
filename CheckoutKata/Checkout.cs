@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CheckoutKata.Pricing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace CheckoutKata
     {
         private readonly PricingRules _rules;
         private readonly List<string> _items = new();
+        private readonly CheckoutPriceCalculator _priceCalculator = new();
         public Checkout(PricingRules pricingRules)
         {
             _rules = pricingRules;
@@ -22,26 +24,7 @@ namespace CheckoutKata
 
         public int GetTotalPrice()
         {
-            var total = 0;
-
-            foreach (var group in _items.GroupBy(i => i))
-            {
-                var sku = group.Key;
-                var count = group.Count();
-                var unitPrice = _rules.UnitPrices[sku];
-
-                if (_rules.Offers.TryGetValue(sku, out var offer))
-                {
-                    total += (count / offer.Quantity) * offer.Price;
-                    total += (count % offer.Quantity) * unitPrice;
-                }
-                else
-                {
-                    total += count * unitPrice;
-                }
-            }
-
-            return total;
+            return _priceCalculator.Calculate(_items, _rules);
         }
     }
 }

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CheckoutKata
+namespace CheckoutKata.Pricing
 {
     public sealed record MultiBuyOffer(int Quantity, int Price);
-    
+
 }

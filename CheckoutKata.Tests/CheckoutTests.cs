@@ -1,3 +1,5 @@
+using CheckoutKata.Pricing;
+
 namespace CheckoutKata.Tests
 {
     public class CheckoutTests
