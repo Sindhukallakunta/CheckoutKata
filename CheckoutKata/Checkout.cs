@@ -9,12 +9,12 @@ namespace CheckoutKata
 {
     public class Checkout:ICheckout
     {
-        private readonly PricingRules _rules;
+        
         private readonly List<string> _items = new();
-        private readonly CheckoutPriceCalculator _priceCalculator = new();
-        public Checkout(PricingRules pricingRules)
+        private readonly IEnumerable<IPricingRule> _pricingRules;
+        public Checkout(IEnumerable<IPricingRule> pricingRules)
         {
-            _rules = pricingRules;
+            _pricingRules = pricingRules;
         }
 
         public void Scan(string item)
@@ -24,7 +24,7 @@ namespace CheckoutKata
 
         public int GetTotalPrice()
         {
-            return _priceCalculator.Calculate(_items, _rules);
+            return _pricingRules.Sum(rule=>rule.Calculate(_items));
         }
     }
 }

@@ -7,7 +7,14 @@ namespace CheckoutKata.Tests
         [Test]
         public void Empty_Checkout_Returns_Zero()
         {
-            var checkout = new Checkout(PricingRules.Empty());
+            var pricingRules = new IPricingRule[]
+        {
+            new UnitPriceRule("A", 50),
+            new UnitPriceRule("B", 30)
+        };
+
+            var checkout = new Checkout(pricingRules);
+
 
             Assert.That(checkout.GetTotalPrice(), Is.EqualTo(0));
         }
@@ -15,11 +22,12 @@ namespace CheckoutKata.Tests
         [Test]
         public void Single_Item_Returns_Unit_Price()
         {
-            var rules = new PricingRules(
-                new Dictionary<string, int> { ["A"] = 50 }
-            );
+            var pricingRules = new IPricingRule[]
+            {
+              new UnitPriceRule("A", 50)
+            };
 
-            var checkout = new Checkout(rules);
+            var checkout = new Checkout(pricingRules);
             checkout.Scan("A");
 
             Assert.That(checkout.GetTotalPrice(), Is.EqualTo(50));
@@ -28,15 +36,14 @@ namespace CheckoutKata.Tests
         [Test]
         public void Order_Does_Not_Matter()
         {
-            var rules = new PricingRules(
-                new Dictionary<string, int>
+            var pricingRules = new IPricingRule[]                
                 {
-                    ["A"] = 50,
-                    ["B"] = 30
-                }
-            );
+                    new UnitPriceRule("A", 50),
+                    new UnitPriceRule("B", 30)
+                };
+            
 
-            var checkout = new Checkout(rules);
+            var checkout = new Checkout(pricingRules);
 
             checkout.Scan("B");
             checkout.Scan("A");
@@ -48,15 +55,12 @@ namespace CheckoutKata.Tests
         [Test]
         public void Three_As_Cost_130()
         {
-            var rules = new PricingRules(
-                new Dictionary<string, int> { ["A"] = 50 },
-                new Dictionary<string, MultiBuyOffer>
-                {
-                    ["A"] = new MultiBuyOffer(3, 130)
-                }
-            );
+            var pricingRules = new IPricingRule[]
+            {
+               new MultiBuyRule("A", 3, 130, 50)
+            };
 
-            var checkout = new Checkout(rules);
+            var checkout = new Checkout(pricingRules);
 
             checkout.Scan("A");
             checkout.Scan("A");

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace CheckoutKata.Pricing
 {
-    public sealed record MultiBuyOffer(int Quantity, int Price);
-
+    public interface IPricingRule
+    {
+        int Calculate(IEnumerable<string> items);
+    }
 }
