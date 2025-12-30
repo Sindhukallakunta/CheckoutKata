@@ -69,6 +69,43 @@ namespace CheckoutKata.Tests
             Assert.That(checkout.GetTotalPrice(), Is.EqualTo(130));
         }
 
+        [Test]
+        public void Mixed_Basket_With_Offers_Applies_MultiBuy_Correctly()
+        {
+            var pricingRules = new IPricingRule[]
+            {
+               new MultiBuyRule("A", 3, 130, 50),
+               new MultiBuyRule("B", 2, 45, 30)
+            };
+
+            var checkout = new Checkout(pricingRules);
+
+            checkout.Scan("B");
+            checkout.Scan("A");
+            checkout.Scan("B");
+
+            Assert.That(checkout.GetTotalPrice(), Is.EqualTo(95));
+        }
+        [Test]
+        public void Mixed_Basket_Without_Offer_On_B_Uses_Unit_Pricing()
+        {
+            var pricingRules = new IPricingRule[]
+            {
+              new MultiBuyRule("A", 3, 130, 50),
+              new UnitPriceRule("B", 30)
+            };
+
+            var checkout = new Checkout(pricingRules);
+
+            checkout.Scan("B");
+            checkout.Scan("A");
+            checkout.Scan("B");
+
+            Assert.That(checkout.GetTotalPrice(), Is.EqualTo(110));
+        }
+
+
+
 
     }
 }
