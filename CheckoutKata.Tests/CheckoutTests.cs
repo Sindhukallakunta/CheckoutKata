@@ -167,5 +167,16 @@ namespace CheckoutKata.Tests
             );
         }
 
+        [Test]
+        public void Duplicate_Pricing_Rules_For_Same_SKU_Throws()
+        {
+            var rules = new IPricingRule[]
+            {
+               new UnitPriceRule("A", 50),
+               new MultiBuyRule("A", 3, 130, 50)
+            };
+
+            Assert.Throws<InvalidOperationException>(() => new Checkout(rules));
+        }
     }
 }
