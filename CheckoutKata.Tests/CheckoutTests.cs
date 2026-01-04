@@ -143,5 +143,13 @@ namespace CheckoutKata.Tests
             Assert.Throws<ArgumentException>(() => checkout.Scan("Z"));
         }
 
+        [Test]
+        public void Scan_Null_SKU_Throws()
+        {
+            var checkout = new Checkout(new[] { new UnitPriceRule("A", 50) });
+
+            Assert.Throws<ArgumentNullException>(() => checkout.Scan(null));
+        }
+
     }
 }
