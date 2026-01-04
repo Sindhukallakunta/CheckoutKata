@@ -130,5 +130,18 @@ namespace CheckoutKata.Tests
         }
 
 
+        [Test]
+        public void Scan_Unknown_SKU_Throws()
+        {
+            var rules = new IPricingRule[]
+            {
+               new UnitPriceRule("A", 50)
+            };
+
+            var checkout = new Checkout(rules);
+
+            Assert.Throws<ArgumentException>(() => checkout.Scan("Z"));
+        }
+
     }
 }
