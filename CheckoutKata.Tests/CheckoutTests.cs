@@ -159,5 +159,13 @@ namespace CheckoutKata.Tests
             Assert.Throws<ArgumentException>(() => checkout.Scan(""));
         }
 
+        [Test]
+        public void Checkout_With_No_Pricing_Rules_Throws()
+        {
+            Assert.Throws<ArgumentException>(() =>
+                new Checkout(Array.Empty<IPricingRule>())
+            );
+        }
+
     }
 }
