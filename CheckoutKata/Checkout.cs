@@ -22,14 +22,22 @@ namespace CheckoutKata
 
             if (!rules.Any())
                 throw new ArgumentException("At least one pricing rule is required");
-            
+
+            var duplicateSkus = rules
+                .GroupBy(r => r.Sku)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key)
+                .ToList();
+
+            if (duplicateSkus.Any())
+                throw new InvalidOperationException(
+                    $"Duplicate pricing rules detected for SKU(s): {string.Join(", ", duplicateSkus)}"
+                );
+
             _pricingRules = rules;
-            _knownSkus = new HashSet<string> { "A", "B", "C", "D" };
-
-            if (_pricingRules.Count() != _knownSkus.Count)
-                throw new InvalidOperationException("Duplicate pricing rules detected");
-
+            _knownSkus = rules.Select(r => r.Sku).ToHashSet();
         }
+
 
         public void Scan(string item)
         {          
@@ -49,5 +57,7 @@ namespace CheckoutKata
         {
             return _pricingRules.Sum(rule=>rule.Calculate(_items));
         }
+
+        
     }
 }

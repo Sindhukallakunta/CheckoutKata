@@ -8,6 +8,7 @@ namespace CheckoutKata.Pricing
 {
     public interface IPricingRule
     {
+        string Sku { get; }
         int Calculate(IEnumerable<string> items);
     }
 }

@@ -8,14 +8,14 @@ namespace CheckoutKata.Pricing
 {
     public class MultiBuyRule:IPricingRule
     {
-        private readonly string _sku;
+        public string Sku { get; }
         private readonly int _quantity;
         private readonly int _offerPrice;
         private readonly int _unitPrice;
 
         public MultiBuyRule(string sku, int quantity, int offerPrice, int unitPrice)
         {
-            _sku = sku;
+            Sku = sku;
             _quantity = quantity;
             _offerPrice = offerPrice;
             _unitPrice = unitPrice;
@@ -23,7 +23,7 @@ namespace CheckoutKata.Pricing
 
         public int Calculate(IEnumerable<string> items)
         {
-            var count = items.Count(i => i == _sku);
+            var count = items.Count(i => i == Sku);
             return (count / _quantity) * _offerPrice
                  + (count % _quantity) * _unitPrice;
         }

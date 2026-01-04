@@ -8,18 +8,18 @@ namespace CheckoutKata.Pricing
 {
     public class UnitPriceRule:IPricingRule
     {
-        private readonly string _sku;
+        public string Sku { get; }
         private readonly int _unitPrice;
 
         public UnitPriceRule(string sku, int unitPrice)
         {
-            _sku = sku;
+            Sku = sku;
             _unitPrice = unitPrice;
         }
 
         public int Calculate(IEnumerable<string> items)
         {
-            return items.Count(i => i == _sku) * _unitPrice;
+            return items.Count(i => i == Sku) * _unitPrice;
         }
     }
 }
