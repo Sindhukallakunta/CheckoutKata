@@ -15,7 +15,15 @@ namespace CheckoutKata
         private readonly HashSet<string> _knownSkus;
         public Checkout(IEnumerable<IPricingRule> pricingRules)
         {
-            _pricingRules = pricingRules ?? throw new ArgumentNullException(nameof(pricingRules));
+            if (pricingRules == null)
+                throw new ArgumentNullException(nameof(pricingRules));
+
+            var rules = pricingRules.ToList();
+
+            if (!rules.Any())
+                throw new ArgumentException("At least one pricing rule is required");
+
+            _pricingRules = rules;
             _knownSkus = new HashSet<string> { "A", "B", "C", "D" };
         }
 
