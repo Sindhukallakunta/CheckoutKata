@@ -20,9 +20,12 @@ namespace CheckoutKata
         }
 
         public void Scan(string item)
-        {
+        {          
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
+
+            if (string.IsNullOrWhiteSpace(item))
+                throw new ArgumentException("SKU cannot be empty", nameof(item));
 
             if (!_knownSkus.Contains(item))
                 throw new ArgumentException($"Unknown SKU: {item}");
