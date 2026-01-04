@@ -12,13 +12,18 @@ namespace CheckoutKata
         
         private readonly List<string> _items = new();
         private readonly IEnumerable<IPricingRule> _pricingRules;
+        private readonly HashSet<string> _knownSkus;
         public Checkout(IEnumerable<IPricingRule> pricingRules)
         {
-            _pricingRules = pricingRules;
+            _pricingRules = pricingRules ?? throw new ArgumentNullException(nameof(pricingRules));
+            _knownSkus = new HashSet<string> { "A", "B", "C", "D" };
         }
 
         public void Scan(string item)
         {
+            if (!_knownSkus.Contains(item))
+                throw new ArgumentException($"Unknown SKU: {item}");
+
             _items.Add(item);
         }
 
